@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemputer - Your Pocket Alchemist | The World's First Chemistry Calculator</title>
+    <meta name="description" content="Chemputer is the world's first physical chemistry calculator. Calculate molar masses, balance equations, and solve stoichiometry instantly. Built for students, approved for exams.">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #F97316;
+            --primary-dark: #EA580C;
+            --secondary: #64748B;
+            --dark: #1E293B;
+            --light: #F8FAFC;
+            --accent: #0891B2;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: #fff;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .cta-nav {
+            background: var(--primary);
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            color: white !important;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .cta-nav:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+            color: white;
+            padding: 150px 2rem 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text {
+            text-align: left;
+        }
+
+        .tagline {
+            color: var(--primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: #CBD5E1;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--dark);
+        }
+
+        .hero-image {
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Stats Section */
+        .stats {
+            background: white;
+            padding: 4rem 2rem;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            color: var(--secondary);
+            font-size: 1rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 100px 2rem;
+            background: var(--light);
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .problem-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .problem-card p {
+            color: var(--secondary);
+            line-height: 1.8;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 2rem;
+            background: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .feature-image {
+            position: relative;
+        }
+
+        .feature-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .feature-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .feature-item p {
+            color: var(--secondary);
+            line-height: 1.7;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 100px 2rem;
+            background: var(--dark);
+            color: white;
+        }
+
+        .how-it-works .section-header h2,
+        .how-it-works .section-label {
+            color: white;
+        }
+
+        .how-it-works .section-header p {
+            color: #CBD5E1;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+        }
+
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .step p {
+            color: #CBD5E1;
+            font-size: 0.95rem;
+        }
+
+        /* Video Section */
+        .video-section {
+            padding: 100px 2rem;
+            background: var(--light);
+        }
+
+        .video-container {
+            max-width: 900px;
+            margin: 3rem auto 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-container video {
+            width: 100%;
+            display: block;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 100px 2rem;
+            background: white;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            max-width: 900px;
+            margin: 4rem auto 0;
+        }
+
+        .pricing-card {
+            background: white;
+            border: 2px solid #E2E8F0;
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            border-width: 3px;
+            background: linear-gradient(to bottom, white 0%, #FFF7ED 100%);
+        }
+
+        .badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .price {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 1.5rem 0;
+        }
+
+        .price span {
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 0.8rem 0;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-white:hover {
+            background: var(--light);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: #CBD5E1;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: #CBD5E1;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 2rem;
+            text-align: center;
+            color: #94A3B8;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text {
+                text-align: center;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pricing-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Order Form Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 3% auto;
+            padding: 0;
+            max-width: 600px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .close {
+            color: white;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            transition: transform 0.2s;
+        }
+
+        .close:hover {
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #E2E8F0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .order-summary {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .order-summary h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            color: var(--secondary);
+        }
+
+        .summary-total {
+            border-top: 2px solid #CBD5E1;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            font-weight: bold;
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">C</div>
+                CHEMPUTER
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#" class="cta-nav" onclick="openOrderForm('student')">Order Now</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="tagline">Your Pocket Alchemist</div>
+                <h1>The World's First Chemistry Calculator</h1>
+                <p>Calculate molar masses, balance equations, and solve stoichiometry instantly. Purpose-built for chemistry students. Exam-approved. Offline forever.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="openOrderForm('student')">Pre-Order Now - 20,000 RWF</button>
+                    <a href="#how-it-works" class="btn btn-secondary">See How It Works</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="images/chemputer.png" alt="Chemputer Calculator">
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <h3>1 sec</h3>
+                <p>Average Calculation Time</p>
+            </div>
+            <div class="stat-item">
+                <h3>20+ hrs</h3>
+                <p>Battery Life</p>
+            </div>
+            <div class="stat-item">
+                <h3>100%</h3>
+                <p>Exam Approved</p>
+            </div>
+            <div class="stat-item">
+                <h3>0</h3>
+                <p>Internet Required</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">The Problem</div>
+                <h2>Chemistry Students Deserve Better</h2>
+                <p>28 million students worldwide waste hours on manual calculations with tools that weren't designed for chemistry</p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🔢</div>
+                    <h3>Generic Calculators</h3>
+                    <p>TI-84 and Casio calculators were designed for math, not chemistry. Students waste 30-40% of study time on manual lookups and manual calculations.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📱</div>
+                    <h3>Distracting Apps</h3>
+                    <p>Chemistry apps on smartphones create constant distractions with notifications. Plus, they're banned in most exams and require internet connectivity.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🌐</div>
+                    <h3>Online Tools</h3>
+                    <p>Web-based calculators require stable internet, can't be used in class or exams, and aren't portable for on-the-go studying.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Game-Changing Features</div>
+                <h2>Built Exclusively for Chemistry</h2>
+                <p>Every button, every function, every algorithm—designed for chemistry students</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-image">
+                    <img src="images/chemputer.png" alt="Chemputer Features">
+                </div>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <div>
+                            <h3>Instant Molar Mass Calculations</h3>
+                            <p>Press H-2-O and get 18.015 g/mol instantly. Built-in periodic table with all 118 elements. No manual lookups ever again.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">⚖️</div>
+                        <div>
+                            <h3>Automatic Equation Balancing</h3>
+                            <p>Enter any chemical equation and let our matrix-based algorithm balance it in under 1 second. Perfect accuracy, every time.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🧪</div>
+                        <div>
+                            <h3>Step-by-Step Stoichiometry</h3>
+                            <p>Calculate limiting reagents, theoretical yields, and conversions with complete step-by-step solutions displayed on screen.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📵</div>
+                        <div>
+                            <h3>100% Offline, Zero Distractions</h3>
+                            <p>No internet, no notifications, no apps. Just pure chemistry calculations. Exam-approved and teacher-recommended.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔋</div>
+                        <div>
+                            <h3>20+ Hour Battery Life</h3>
+                            <p>Rechargeable lithium battery lasts an entire week of heavy use. Never worry about running out of power during exams.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">How It Works</div>
+                <h2>Chemistry Calculations in 4 Simple Steps</h2>
+                <p>Built from scratch using Raspberry Pi and open-source chemistry algorithms</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Press Element Buttons</h3>
+                    <p>Dedicated buttons for the 20 most common elements plus a full periodic table menu</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Enter Formula</h3>
+                    <p>Use numeric keypad for subscripts and coefficients. Arrow keys for equations</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Hit Calculate</h3>
+                    <p>Our chemistry algorithms process using ChemPy libraries and SQLite database</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Get Instant Results</h3>
+                    <p>Complete answers with step-by-step breakdowns displayed on 3.5" LCD screen</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="video-section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">See It In Action</div>
+                <h2>Watch Chemputer Solve Real Chemistry Problems</h2>
+                <p>From molar mass to equation balancing in seconds</p>
+            </div>
+            <div class="video-container">
+                <video controls>
+                    <source src="videos/demo.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Simple Pricing</div>
+                <h2>Choose Your Chemputer</h2>
+                <p>One-time purchase. No subscriptions. No hidden fees.</p>
+            </div>
+            <div class="pricing-cards">
+                <div class="pricing-card featured">
+                    <div class="badge">Most Popular</div>
+                    <h3>Chemputer Student</h3>
+                    <div class="price">20,000<span> RWF</span></div>
+                    <p>Perfect for high school and college students</p>
+                    <ul class="pricing-features">
+                        <li>Molar mass calculations</li>
+                        <li>Equation balancing</li>
+                        <li>Stoichiometry solver</li>
+                        <li>pH & pOH calculator</li>
+                        <li>Gas law calculations</li>
+                        <li>Unit converter</li>
+                        <li>Built-in periodic table</li>
+                        <li>20+ hour battery life</li>
+                        <li>Exam approved</li>
+                        <li>1-year warranty</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="openOrderForm('student')" style="width: 100%; margin-top: 1rem;">Pre-Order Now</button>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Chemputer Pro</h3>
+                    <div class="price">50,000<span> RWF</span></div>
+                    <p>For professionals, teachers, and lab workers</p>
+                    <ul class="pricing-features">
+                        <li>All Student features, plus:</li>
+                        <li>Advanced calculations</li>
+                        <li>Lab-safe housing</li>
+                        <li>Data export via USB</li>
+                        <li>Multi-user profiles</li>
+                        <li>Chromatography calculations</li>
+                        <li>Buffer capacity calculator</li>
+                        <li>ISO/GMP compliance features</li>
+                        <li>Extended 3-year warranty</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <button class="btn btn-secondary" onclick="openOrderForm('pro')" style="width: 100%; margin-top: 1rem; background: var(--secondary); color: white; border: none;">Pre-Order Pro</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="section-container">
+            <h2>Join the Chemistry Revolution</h2>
+            <p>Be among the first 1,000 students to own the world's first chemistry calculator</p>
+            <div class="cta-buttons">
+                <button class="btn btn-white" onclick="openOrderForm('student')">Pre-Order Chemputer - 20,000 RWF</button>
+                <a href="#features" class="btn btn-outline">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>CHEMPUTER</h3>
+                <p>The world's first physical chemistry calculator. Built by students, for students. Making chemistry education accessible to everyone, everywhere.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#">Specifications</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Press Kit</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Shipping</a></li>
+                    <li><a href="#">Returns</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Chemputer. All rights reserved. | Built with ❤️ for chemistry students worldwide</p>
+        </div>
+    </footer>
+
+    <!-- Order Form Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeOrderForm()">&times;</span>
+                <h2>Pre-Order Your Chemputer</h2>
+            </div>
+            <div class="modal-body">
+                <div class="order-summary" id="orderSummary">
+                    <h3>Order Summary</h3>
+                    <div class="summary-item">
+                        <span id="productName">Chemputer Student</span>
+                        <span id="productPrice">20,000 RWF</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Shipping</span>
+                        <span>3,000 RWF</span>
+                    </div>
+                    <div class="summary-item summary-total">
+                        <span>Total</span>
+                        <span id="totalPrice">23,000 RWF</span>
+                    </div>
+                </div>
+
+                <form id="orderForm">
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <select id="quantity" name="quantity" onchange="updateTotal()">
+                            <option value="1">1 Chemputer</option>
+                            <option value="2">2 Chemputers</option>
+                            <option value="3">3 Chemputers</option>
+                            <option value="5">5 Chemputers (10% off)</option>
+                            <option value="10">10+ Chemputers (20% off - Bulk)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Shipping Address *</label>
+                        <textarea id="address" name="address" required placeholder="Street, City, State, ZIP Code, Country"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Special Instructions (Optional)</label>
+                        <textarea id="notes" name="notes" placeholder="Any special requests or notes for your order"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Complete Pre-Order</button>
+                    <p style="text-align: center; margin-top: 1rem; color: var(--secondary); font-size: 0.9rem;">Estimated delivery: May 2025. You will receive a confirmation email shortly.</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Order form functionality
+        let currentProduct = 'student';
+
+        function openOrderForm(product) {
+            currentProduct = product;
+            document.getElementById('orderModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            if (product === 'pro') {
+                document.getElementById('productName').textContent = 'Chemputer Pro';
+                document.getElementById('productPrice').textContent = '50,000 RWF';
+                document.getElementById('totalPrice').textContent = '53,000 RWF';
+            } else {
+                document.getElementById('productName').textContent = 'Chemputer Student';
+                document.getElementById('productPrice').textContent = '20,000 RWF';
+                document.getElementById('totalPrice').textContent = '23,000 RWF';
+            }
+        }
+
+        function closeOrderForm() {
+            document.getElementById('orderModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function updateTotal() {
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const basePrice = currentProduct === 'pro' ? 50000 : 20000;
+            let discount = 1;
+            
+            if (quantity >= 10) discount = 0.8;
+            else if (quantity >= 5) discount = 0.9;
+            
+            const productTotal = basePrice * quantity * discount;
+            const shipping = 3000; // Shipping in RWF
+            const total = productTotal + shipping;
+            
+            document.getElementById('productPrice').textContent = productTotal.toLocaleString() + ' RWF';
+            document.getElementById('totalPrice').textContent = total.toLocaleString() + ' RWF';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('orderModal');
+            if (event.target == modal) {
+                closeOrderForm();
+            }
+        }
+
+        // Form submission
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = {
+                product: currentProduct === 'pro' ? 'Chemputer Pro' : 'Chemputer Student',
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                quantity: document.getElementById('quantity').value,
+                address: document.getElementById('address').value,
+                notes: document.getElementById('notes').value,
+                total: document.getElementById('totalPrice').textContent
+            };
+            
+            // In a real implementation, you would send this to your backend
+            console.log('Order submitted:', formData);
+            
+            // Show success message
+            alert('Thank you for your pre-order! You will receive a confirmation email at ' + formData.email + ' within 24 hours. Expected delivery: May 2025.');
+            
+            closeOrderForm();
+            document.getElementById('orderForm').reset();
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
